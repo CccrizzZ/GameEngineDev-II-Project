@@ -18,6 +18,9 @@ struct Command
 	
 	// command category
 	unsigned int category = NULL;
+
+	// define if command is a realtime action
+	bool isRealtimeAction = false;
 };
 
 
