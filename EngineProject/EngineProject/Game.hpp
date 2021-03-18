@@ -1,5 +1,9 @@
+#pragma once
 #include "World.hpp"
 #include "Player.h"
+#include "StateStack.h"
+
+
 
 class Game : public D3DApp
 {
@@ -27,6 +31,8 @@ private:
 	void UpdateMainPassCB(const GameTimer& gt);
 
 	void processInput();
+
+	void RegisterStates();
 
 
 
@@ -93,6 +99,11 @@ private:
 	Camera mCamera;
 	World mWorld;
 	Player mPlayer;
+
+
+	// state stack
+	StateStack mStateStack;
+
 
 public:
 	std::vector<std::unique_ptr<RenderItem>>& getRenderItems() { return mAllRitems; }

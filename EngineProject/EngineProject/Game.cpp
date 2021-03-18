@@ -1,11 +1,19 @@
 #include "Game.hpp"
+// #include "GameState.h"
+// #include "State.h"
 
 const int gNumFrameResources = 3;
 
 Game::Game(HINSTANCE hInstance)
 	: D3DApp(hInstance)
 	, mWorld(this)
+	, mStateStack(State::Context(mWorld, mPlayer))
 {
+
+	// statestack init
+	RegisterStates();
+	mStateStack.pushState(States::Title);
+
 }
 
 Game::~Game()
@@ -69,6 +77,16 @@ void Game::processInput()
 	CommandQueue& commands = mWorld.getCommandQueue();
 	mPlayer.handleEvent(commands);
 	mPlayer.handleRealtimeInput(commands);
+
+
+}
+
+void Game::RegisterStates()
+{
+	// mStateStack.registerState<TitleState>(States::Title);
+	// mStateStack.registerState<MenuState>(States::Menu);
+
+	// mStateStack.registerState<GameState>(States::Game);
 
 
 }
