@@ -10,6 +10,7 @@ World::World(Game* game)
 	, mScrollSpeed(1.0f)
 {
 
+
 	aircraftSize = XMFLOAT3(0.2f, 0.2f, 0.2f);
 }
 

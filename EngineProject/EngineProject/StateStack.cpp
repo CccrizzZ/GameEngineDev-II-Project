@@ -1,5 +1,4 @@
 #include "StateStack.h"
-// #include "State.h"
 
 StateStack::StateStack(State::Context context)
 	: mStack()
@@ -12,10 +11,26 @@ StateStack::StateStack(State::Context context)
 
 void StateStack::update(const GameTimer& gt)
 {
+	// Iterate from top to bottom, stop as soon as update() returns false
+	for (auto itr = mStack.rbegin(); itr != mStack.rend(); ++itr)
+	{
+		if (!(*itr)->update(gt))
+		{
+			break;
+
+		}
+	}
+
+	applyPendingChanges();
 }
 
 void StateStack::draw()
 {
+	// Draw all active states from bottom to top
+	for(State::Ptr& state: mStack)
+	{
+		state->draw();
+	}
 }
 
 void StateStack::pushState(States::ID stateID)
@@ -36,6 +51,11 @@ void StateStack::clearStates()
 bool StateStack::isEmpty() const
 {
 	return mStack.empty();
+}
+
+void StateStack::BuildStateWorld()
+{
+	mContext.BuildWorld();
 }
 
 State::Ptr StateStack::createState(States::ID stateID)
@@ -72,15 +92,7 @@ void StateStack::applyPendingChanges()
 
 
 
-// register state
-template <typename T>
-void StateStack::registerState(States::ID stateID)
-{
-	mFactories[stateID] = [this]()
-	{
-		return State::Ptr(new T(*this, mContext));
-	};
-}
+
 
 
 // pendingchange constructor

@@ -6,9 +6,6 @@
 using namespace std;
 
 
-
-// class State;
-
 class StateStack
 {
 public:
@@ -25,8 +22,14 @@ public:
     
     // template for registering a state
     template <typename T>
-    void registerState(States::ID stateID);
-    
+    void registerState(States::ID stateID)
+    {
+        mFactories[stateID] = [this]()
+        {
+            return State::Ptr(new T(*this, mContext));
+        };
+    }
+
     void update(const GameTimer& gt);
     void draw();
     // void handleEvent(const )
@@ -38,7 +41,10 @@ public:
     // determine if stack empty
     bool isEmpty() const;
 
+    // build state world
+    void BuildStateWorld();
 
+    State::Context mContext;
 private:
 	struct PendingChange
 	{
@@ -58,7 +64,6 @@ private:
     vector<State::Ptr> mStack;
     vector<PendingChange> mPendingList;
 
-    State::Context mContext;
     map<States::ID, function<State::Ptr()>> mFactories;
 
 

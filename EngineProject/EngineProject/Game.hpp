@@ -97,7 +97,7 @@ private:
 
 	POINT mLastMousePos;
 	Camera mCamera;
-	World mWorld;
+	// World mWorld;
 	Player mPlayer;
 
 

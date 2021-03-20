@@ -1,31 +1,36 @@
 #include "Game.hpp"
-// #include "GameState.h"
+#include "GameState.h"
 // #include "State.h"
 
 const int gNumFrameResources = 3;
 
 Game::Game(HINSTANCE hInstance)
 	: D3DApp(hInstance)
-	, mWorld(this)
-	, mStateStack(State::Context(mWorld, mPlayer))
+	// , mWorld(this)
+	, mStateStack(State::Context(mPlayer, *this))
 {
 
 	// statestack init
 	RegisterStates();
-	mStateStack.pushState(States::Title);
+	mStateStack.pushState(States::Game);
 
 }
 
 Game::~Game()
 {
 	if (md3dDevice != nullptr)
+	{
 		FlushCommandQueue();
+	}
 }
 
 bool Game::Initialize()
 {
 	if (!D3DApp::Initialize())
+	{
 		return false;
+	}
+		
 
 
 	mCamera.SetPosition(0, 5, 0);
@@ -52,9 +57,11 @@ bool Game::Initialize()
 	ThrowIfFailed(mCommandList->Close());
 	ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
 	mCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
+	
 
 	// Wait until initialization is complete.
 	FlushCommandQueue();
+
 
 	return true;
 }
@@ -74,9 +81,9 @@ void Game::OnResize()
 void Game::processInput()
 {
 	
-	CommandQueue& commands = mWorld.getCommandQueue();
-	mPlayer.handleEvent(commands);
-	mPlayer.handleRealtimeInput(commands);
+	// CommandQueue& commands = mWorld.getCommandQueue();
+	// mPlayer.handleEvent(commands);
+	// mPlayer.handleRealtimeInput(commands);
 
 
 }
@@ -86,7 +93,7 @@ void Game::RegisterStates()
 	// mStateStack.registerState<TitleState>(States::Title);
 	// mStateStack.registerState<MenuState>(States::Menu);
 
-	// mStateStack.registerState<GameState>(States::Game);
+	mStateStack.registerState<GameState>(States::Game);
 
 
 }
@@ -96,9 +103,12 @@ void Game::Update(const GameTimer& gt)
 {
 	// OnKeyboardInput(gt);
 	// UpdateCamera(gt);
-	mWorld.update(gt);
+	// mWorld.update(gt);
+	mStateStack.update(gt);
 	
-	processInput();
+
+
+	// processInput();
 
 	mCamera.UpdateViewMatrix();
 	// Cycle through the circular frame resource array.
@@ -155,7 +165,18 @@ void Game::Draw(const GameTimer& gt)
 	auto passCB = mCurrFrameResource->PassCB->Resource();
 	mCommandList->SetGraphicsRootConstantBufferView(2, passCB->GetGPUVirtualAddress());
 
-	mWorld.draw();
+
+	// draw world
+	// mWorld.draw();
+
+	// draw statestack
+	mStateStack.draw();
+
+
+
+
+
+
 	DrawRenderItems(mCommandList.Get(), mOpaqueRitems);
 
 	// Indicate a state transition on the resource usage.
@@ -645,11 +666,20 @@ void Game::BuildMaterials()
 
 void Game::BuildRenderItems()
 {
-	mWorld.buildScene();
+	// build world
+	// mWorld.buildScene();
+	
+
+
+	mStateStack.mContext.world->buildScene();
+
+
 
 	// All the render items are opaque.
 	for (auto& e : mAllRitems)
+	{
 		mOpaqueRitems.push_back(e.get());
+	}
 }
 
 void Game::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<RenderItem*>& ritems)

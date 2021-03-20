@@ -12,7 +12,6 @@ public:
 	void update(const GameTimer& gt);
 	void draw();
 
-	//void loadTextures();
 	void buildScene();
 	CommandQueue& getCommandQueue();
 	

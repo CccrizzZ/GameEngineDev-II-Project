@@ -22,7 +22,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 	{
 		Game theApp(hInstance);
 		if (!theApp.Initialize())
+		{
 			return 0;
+		}
 
 		return theApp.Run();
 	}

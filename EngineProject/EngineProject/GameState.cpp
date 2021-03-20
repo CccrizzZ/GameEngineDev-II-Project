@@ -1,6 +1,9 @@
 #include "GameState.h"
 
-GameState::GameState(StateStack& stack, Context context) : State(stack, context), mWorld(*context.world), mPlayer(*context.player)
+GameState::GameState(StateStack& stack, Context context):
+    State(stack, context), 
+    mWorld(context.game), 
+    mPlayer(*context.player)
 {
 }
 
@@ -13,8 +16,11 @@ bool GameState::update(const GameTimer& gt)
 {  
     mWorld.update(gt);
 
+	CommandQueue& commands = mWorld.getCommandQueue();
+	mPlayer.handleRealtimeInput(commands);
 
-	return false;
+	return true;
+
 }
 
 bool GameState::handleEvent()

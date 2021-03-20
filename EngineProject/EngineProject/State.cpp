@@ -1,10 +1,18 @@
 #include "State.h"
-// #include "StateStack.h"
+#include "StateStack.h"
+#include "World.hpp"
+#include "Player.h"
+#include "Game.hpp"
 
 
-
-State::Context::Context(World& w, Player& p) : world(&w), player(&p)
+State::Context::Context(Player& player, Game& game) : player(&player), game(&game)
 {
+	world = new World(&game);
+}
+
+void State::Context::BuildWorld()
+{
+	world->buildScene();
 }
 
 State::State(StateStack& stack, Context context)
@@ -17,14 +25,7 @@ State::~State()
 {
 }
 
-void State::draw()
-{
-}
 
-bool State::update(const GameTimer& gt)
-{
-	return false;
-}
 
 void State::requestStackPush(States::ID stateID)
 {
