@@ -31,7 +31,7 @@ void SpriteNode::buildCurrent()
 
 void SpriteNode::Update(const GameTimer gt)
 {
-	// move(0.0f, 0.0f, -0.001f);
+	move(0.0f, 0.0f, -0.001f);
 }
 
 void SpriteNode::UpdateWithCmd(CommandQueue& commands)

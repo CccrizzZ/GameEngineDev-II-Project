@@ -34,9 +34,12 @@ public:
     void draw();
     // void handleEvent(const )
 
+
+    // state manipulation
     void pushState(States::ID);
     void popState();
     void clearStates();
+
 
     // determine if stack empty
     bool isEmpty() const;

@@ -11,14 +11,18 @@ StateStack::StateStack(State::Context context)
 
 void StateStack::update(const GameTimer& gt)
 {
+	// mStack[0] -> update(gt);
+
 	// Iterate from top to bottom, stop as soon as update() returns false
-	for (auto itr = mStack.rbegin(); itr != mStack.rend(); ++itr)
+	for (auto i = mStack.rbegin(); i != mStack.rend(); ++i)
 	{
-		if (!(*itr)->update(gt))
+		if (!(*i)->update(gt))
 		{
 			break;
-
 		}
+
+		// (*i)->update(gt);
+
 	}
 
 	applyPendingChanges();
@@ -60,13 +64,16 @@ void StateStack::BuildStateWorld()
 
 State::Ptr StateStack::createState(States::ID stateID)
 {
+	// found (ID, state pointer initiallizer)
 	auto found = mFactories.find(stateID);
+
 	assert(found != mFactories.end());
 
 	return found->second();
 }
 
 
+// apply changes for changing state
 void StateStack::applyPendingChanges()
 {
 	for(PendingChange change: mPendingList)

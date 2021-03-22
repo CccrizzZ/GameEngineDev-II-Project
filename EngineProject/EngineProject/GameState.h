@@ -9,12 +9,13 @@ class GameState : public State
 public:
     GameState(StateStack& stack, Context context);
 
-    virtual void draw();
-    virtual bool update(const GameTimer& gt);
+    void draw();
+    bool update(const GameTimer& gt);
     virtual bool handleEvent();
 
 private:
-    World mWorld;
+
+    World& mWorld;
     Player& mPlayer;
     
 };

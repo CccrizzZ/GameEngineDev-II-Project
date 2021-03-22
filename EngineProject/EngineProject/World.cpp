@@ -10,12 +10,16 @@ World::World(Game* game)
 	, mScrollSpeed(1.0f)
 {
 
+	mBackground = new SpriteNode(game);
+	mPlayerAircraft = new Aircraft(Aircraft::Eagle , game);
 
 	aircraftSize = XMFLOAT3(0.2f, 0.2f, 0.2f);
 }
 
 void World::update(const GameTimer& gt)
 {
+
+
 	mSceneGraph->update(gt);
 	// mPlayerAircraft->Update(gt);
 
@@ -28,6 +32,8 @@ void World::update(const GameTimer& gt)
 	}
 
 	mBackground->Update(gt);
+
+
 }
 
 void World::draw()

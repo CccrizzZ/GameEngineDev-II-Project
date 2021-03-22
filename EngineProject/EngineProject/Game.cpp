@@ -671,7 +671,7 @@ void Game::BuildRenderItems()
 	
 
 
-	mStateStack.mContext.world->buildScene();
+	mStateStack.BuildStateWorld();
 
 
 

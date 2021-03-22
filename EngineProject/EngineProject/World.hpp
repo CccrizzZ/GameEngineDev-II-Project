@@ -8,6 +8,7 @@
 class World 
 {
 public:
+	World() = default;
 	explicit World(Game* window);
 	void update(const GameTimer& gt);
 	void draw();
