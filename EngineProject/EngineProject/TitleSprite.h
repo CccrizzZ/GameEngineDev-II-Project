@@ -16,5 +16,8 @@ public:
 private:
 	virtual void drawCurrent() const;
 	virtual void buildCurrent();
+
+	
+    unique_ptr<RenderItem> SpriteRenderer;
 };
 

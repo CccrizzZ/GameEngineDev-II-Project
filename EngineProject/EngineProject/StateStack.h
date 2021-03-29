@@ -48,7 +48,7 @@ public:
     bool isEmpty() const;
 
     // build state world
-    void BuildStateWorld();
+    // void BuildStateWorld();
 
     State::Context mContext;
 private:

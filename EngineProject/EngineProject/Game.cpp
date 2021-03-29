@@ -56,8 +56,9 @@ bool Game::Initialize()
 	// statestack init
 	RegisterStates();
 	// push state
-	mStateStack.pushState(States::Title);
+	// mStateStack.pushState(States::Game);
 
+	mStateStack.pushState(States::Title);
 
 
 	// BuildRenderItems();
@@ -108,6 +109,10 @@ void Game::RegisterStates()
 
 
 }
+
+
+
+
 
 
 void Game::Update(const GameTimer& gt)
@@ -188,7 +193,7 @@ void Game::Draw(const GameTimer& gt)
 	// mWorld.draw();
 
 	// draw statestack
-	// mStateStack.draw();
+	mStateStack.draw();
 
 
 
@@ -443,7 +448,7 @@ void Game::LoadTextures()
 	//Desert
 	auto TitleTex = std::make_unique<Texture>();
 	TitleTex->Name = "TitleTex";
-	TitleTex->Filename = L"../../Textures/rogers.dds";
+	TitleTex->Filename = L"../../Textures/gbc1.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
 		mCommandList.Get(), TitleTex->Filename.c_str(),
 		TitleTex->Resource, TitleTex->UploadHeap));
@@ -657,17 +662,33 @@ void Game::BuildPSOs()
 	ThrowIfFailed(md3dDevice->CreateGraphicsPipelineState(&opaquePsoDesc, IID_PPV_ARGS(&mOpaquePSO)));
 }
 
-void Game::BuildFrameResources(int size)
+void Game::BuildFrameResources(int buildsize)
 {
-	for (int i = 0; i < size; ++i)
+
+	// mFrameResources.clear();
+
+	// int temp = mFrameResources.size() - buildsize;
+
+	
+	if (mFrameResources.size() != buildsize)
 	{
-		mFrameResources.push_back(std::make_unique<FrameResource>(
-			md3dDevice.Get(),
-			1, 
-			(UINT)size, 
-			(UINT)mMaterials.size()
-		));
+		for (int i = 0; i < buildsize; ++i)
+		{
+			mFrameResources.push_back(
+				std::make_unique<FrameResource>(
+					md3dDevice.Get(),
+					1, 
+					(UINT)buildsize, 
+					(UINT)mMaterials.size()
+				)
+			);
+		}
 	}
+	
+	
+
+	
+
 }
 //step13
 void Game::BuildMaterials()
@@ -719,11 +740,11 @@ void Game::BuildRenderItems(vector<unique_ptr<RenderItem>>& allrenderitems)
 	// build world
 	// mWorld.buildScene();
 	
-
-
 	// mStateStack.BuildStateWorld();
 
 
+	// clear render item before going into next scene
+	mOpaqueRitems.clear();
 
 	// All the render items are opaque.
 	for (auto& e : allrenderitems)

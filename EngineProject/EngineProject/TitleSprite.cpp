@@ -32,17 +32,17 @@ void TitleSprite::drawCurrent() const
 
 void TitleSprite::buildCurrent()
 {
-    // auto render = std::make_unique<RenderItem>();
-	// renderer = render.get();
-	// renderer->World = getTransform();
-	// XMStoreFloat4x4(&renderer->TexTransform, XMMatrixScaling(10.0f, 10.0f, 10.0f));
-	// renderer->ObjCBIndex = game->getRenderItems().size();
-	// renderer->Mat = game->getMaterials()["Title"].get();
-	// renderer->Geo = game->getGeometries()["boxGeo"].get();
-	// renderer->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	// renderer->IndexCount = renderer->Geo->DrawArgs["box"].IndexCount;
-	// renderer->StartIndexLocation = renderer->Geo->DrawArgs["box"].StartIndexLocation;
-	// renderer->BaseVertexLocation = renderer->Geo->DrawArgs["box"].BaseVertexLocation;
-
-	// game->getRenderItems().push_back(std::move(render));
+	SpriteRenderer = std::make_unique<RenderItem>();
+	renderer = SpriteRenderer.get();
+	renderer->World = getTransform();
+	XMStoreFloat4x4(&renderer->TexTransform, XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	renderer->ObjCBIndex = mState->getRenderItems().size();
+	renderer->Mat = mState->getContext()->game->getMaterials()["Title"].get();
+	renderer->Geo = mState->getContext()->game->getGeometries()["boxGeo"].get();
+	renderer->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	renderer->IndexCount = renderer->Geo->DrawArgs["box"].IndexCount;
+	renderer->StartIndexLocation = renderer->Geo->DrawArgs["box"].StartIndexLocation;
+	renderer->BaseVertexLocation = renderer->Geo->DrawArgs["box"].BaseVertexLocation;
+	
+	mState->getRenderItems().push_back(std::move(SpriteRenderer));
 }

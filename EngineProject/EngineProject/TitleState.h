@@ -19,7 +19,10 @@ private:
 
 
     // entities
-    SpriteNode*	bg;
+    TitleSprite* bg;
+    TitleSprite* bg2;
+    TitleSprite* bg3;
+
 
 };
 

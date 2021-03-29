@@ -5,11 +5,14 @@
 #include "CommandQueue.h"
 #include "TitleSprite.h"
 
+
+
+// NOT USING THIS SCRIPT
 class World 
 {
 public:
 	World() = default;
-	explicit World(Game* window);
+	explicit World(Game* game, State* state);
 	void update(const GameTimer& gt);
 	void draw();
 
@@ -28,6 +31,7 @@ private:
 
 private:
 	Game* mGame;
+	State* CurrState;
 
 	SceneNode* mSceneGraph;
 	std::array<SceneNode*, LayerCount> mSceneLayers;

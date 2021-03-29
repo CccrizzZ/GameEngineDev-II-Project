@@ -24,7 +24,7 @@ public:
 
 	void Update(const GameTimer gt);
 	void UpdateWithCmd(CommandQueue& commands);
-    void SetGeoDrawName(string material, string geometry, string shape);
+    void CustomBuildCurrent(string material, string geometry, string shape);
    
 
 

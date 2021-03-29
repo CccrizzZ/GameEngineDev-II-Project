@@ -70,10 +70,10 @@ bool StateStack::isEmpty() const
 	return mStack.empty();
 }
 
-void StateStack::BuildStateWorld()
-{
-	mContext.BuildWorld();
-}
+// void StateStack::BuildStateWorld()
+// {
+// 	mContext.BuildWorld();
+// }
 
 State::Ptr StateStack::createState(States::ID stateID)
 {

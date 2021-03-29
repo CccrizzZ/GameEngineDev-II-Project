@@ -15,9 +15,16 @@ public:
 
 private:
     Game* mGame;
-    
+    Aircraft* mPlayerAircraft;
+	SpriteNode*	mBackground;
+	Aircraft* mEnemy;
+	
     World mWorld;
     Player& mPlayer;
-    
+    	
+	XMFLOAT3 aircraftSize;
+	XMFLOAT3 enemySize;
+
+	CommandQueue cQueue;
 };
 

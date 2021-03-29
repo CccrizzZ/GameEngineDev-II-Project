@@ -24,7 +24,7 @@ void SpriteNode::buildCurrent()
 	SpriteRenderer = std::make_unique<RenderItem>();
 	renderer = SpriteRenderer.get();
 	renderer->World = getTransform();
-	XMStoreFloat4x4(&renderer->TexTransform, XMMatrixScaling(10.0f, 10.0f, 10.0f));
+	XMStoreFloat4x4(&renderer->TexTransform, XMMatrixScaling(5.0f, 5.0f, 5.0f));
 	renderer->ObjCBIndex = mState->getRenderItems().size();
 	renderer->Mat = mState->getContext()->game->getMaterials()["Grass"].get();
 	renderer->Geo = mState->getContext()->game->getGeometries()["boxGeo"].get();
@@ -38,7 +38,7 @@ void SpriteNode::buildCurrent()
 
 void SpriteNode::Update(const GameTimer gt)
 {
-	// move(0.0f, 0.0f, backgroundSpeed);
+	move(0.0f, 0.0f, backgroundSpeed);
 }
 
 void SpriteNode::UpdateWithCmd(CommandQueue& commands)
@@ -49,27 +49,17 @@ void SpriteNode::UpdateWithCmd(CommandQueue& commands)
 	// commands.push(moveDown);
 }
 
-void SpriteNode::SetGeoDrawName(string material, string geometry, string shape)
+void SpriteNode::CustomBuildCurrent(string material, string geometry, string shape)
 {
 
-	SpriteRenderer = std::make_unique<RenderItem>();
-	renderer = SpriteRenderer.get();
-	renderer->World = getTransform();
-	XMStoreFloat4x4(&renderer->TexTransform, XMMatrixScaling(10.0f, 10.0f, 10.0f));
-	renderer->ObjCBIndex = mState->getRenderItems().size();
-	// renderer->ObjCBIndex = 0;
-
-	renderer->Mat = mState->getContext()->game->getMaterials()["Grass"].get();
+	// SpriteRenderer = std::make_unique<RenderItem>();
+	// renderer = SpriteRenderer.get();
+	// renderer->World = getTransform();
+	// XMStoreFloat4x4(&renderer->TexTransform, XMMatrixScaling(10.0f, 10.0f, 10.0f));
+	// renderer->ObjCBIndex = mState->getRenderItems().size();
 	// renderer->Mat = game->getMaterials()[material].get();
-	
-	renderer->Geo = mState->getContext()->game->getGeometries()["boxGeo"].get();
 	// renderer->Geo = game->getGeometries()[geometry].get();
-
-	renderer->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-
-	renderer->IndexCount = renderer->Geo->DrawArgs["box"].IndexCount;
-	renderer->StartIndexLocation = renderer->Geo->DrawArgs["box"].StartIndexLocation;
-	renderer->BaseVertexLocation = renderer->Geo->DrawArgs["box"].BaseVertexLocation;
+	// renderer->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	// renderer->IndexCount = renderer->Geo->DrawArgs[shape].IndexCount;
 	// renderer->StartIndexLocation = renderer->Geo->DrawArgs[shape].StartIndexLocation;
 	// renderer->BaseVertexLocation = renderer->Geo->DrawArgs[shape].BaseVertexLocation;

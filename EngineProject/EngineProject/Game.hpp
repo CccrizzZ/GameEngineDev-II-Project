@@ -19,7 +19,7 @@ public:
 	void UpdateObjectCBs(vector<unique_ptr<RenderItem>>& allrenderitems);
 
 	// upgraded
-	void BuildFrameResources(int size);
+	void BuildFrameResources(int buildsize);
 
 	// upgraded
 	void BuildRenderItems(vector<unique_ptr<RenderItem>>& allrenderitems);
@@ -121,7 +121,6 @@ private:
 
 
 public:
-
 
 	// std::vector<std::unique_ptr<RenderItem>>& getRenderItems() { return mStateStack; }
 	std::unordered_map<std::string, std::unique_ptr<Material>>& getMaterials() { return mMaterials; }
