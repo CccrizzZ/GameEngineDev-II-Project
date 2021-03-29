@@ -11,7 +11,6 @@ StateStack::StateStack(State::Context context)
 
 void StateStack::update(const GameTimer& gt)
 {
-	// mStack[0] -> update(gt);
 
 	// Iterate from top to bottom, stop as soon as update() returns false
 	for (auto i = mStack.rbegin(); i != mStack.rend(); ++i)
@@ -21,12 +20,26 @@ void StateStack::update(const GameTimer& gt)
 			break;
 		}
 
-		// (*i)->update(gt);
 
 	}
 
 	applyPendingChanges();
 }
+
+void StateStack::UpdateStateObjectCB()
+{
+	for (auto i = mStack.rbegin(); i != mStack.rend(); ++i)
+	{
+
+		if (!(*i)->UpdateObjectCB())
+		{
+			break;
+		}
+
+	}
+	
+}
+
 
 void StateStack::draw()
 {

@@ -1,7 +1,23 @@
 #include "Aircraft.hpp"
 #include "Game.hpp"
 
-Aircraft::Aircraft(Type type, Game* game) : Entity(game), mType(type)
+// Aircraft::Aircraft(Type type, Game* game) : Entity(game), mType(type)
+// {
+// 	switch (type)
+// 	{
+// 	case (Eagle):
+// 		mSprite = "Eagle";
+// 		break;
+// 	case (Raptor):
+// 		mSprite = "Raptor";
+// 		break;
+// 	default:
+// 		mSprite = "Eagle";
+// 		break;
+// 	}
+// }
+
+Aircraft::Aircraft(Type type, State* state) : Entity(state), mType(type)
 {
 	switch (type)
 	{
@@ -17,6 +33,7 @@ Aircraft::Aircraft(Type type, Game* game) : Entity(game), mType(type)
 	}
 }
 
+
 void Aircraft::drawCurrent() const
 {	
 
@@ -27,15 +44,17 @@ void Aircraft::buildCurrent()
 	auto render = std::make_unique<RenderItem>();
 	renderer = render.get();
 	renderer->World = getTransform();
-	renderer->ObjCBIndex = game->getRenderItems().size();
-	renderer->Mat = game->getMaterials()[mSprite].get();
-	renderer->Geo = game->getGeometries()["boxGeo"].get();
+	renderer->ObjCBIndex = mState->getRenderItems().size();
+	renderer->Mat = mState->getContext()->game->getMaterials()[mSprite].get();
+	renderer->Geo = mState->getContext()->game->getGeometries()["boxGeo"].get();
 	renderer->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	renderer->IndexCount = renderer->Geo->DrawArgs["box"].IndexCount;
 	renderer->StartIndexLocation = renderer->Geo->DrawArgs["box"].StartIndexLocation;
 	renderer->BaseVertexLocation = renderer->Geo->DrawArgs["box"].BaseVertexLocation;
 
-	game->getRenderItems().push_back(std::move(render));
+	// game->getRenderItems().push_back(std::move(render));
+	mState->getRenderItems().push_back(std::move(render));
+
 }
 
 void Aircraft::Update(const GameTimer& gt)
@@ -49,6 +68,10 @@ void Aircraft::Update(const GameTimer& gt)
 	// {
 	// 	move(0.001f, 0.0f, 0.0f);
 	// }
+
+
+
+
 }
 
 unsigned int Aircraft::getCategory() const

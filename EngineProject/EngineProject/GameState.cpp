@@ -1,14 +1,17 @@
 #include "GameState.h"
 
-GameState::GameState(StateStack& stack, Context context):
+GameState::GameState(StateStack* stack, Context* context):
     State(stack, context), 
-    mPlayer(*context.player), 
-    mWorld(*context.world)
+    mPlayer(*context->player), 
+    mGame(context->game)
 {
 
+    mWorld = World(mGame);
 
-    OutputDebugString(L"gamestate init");
-    OutputDebugString(L"\n");
+    mWorld.buildScene();
+
+    // OutputDebugString(L"gamestate init");
+    // OutputDebugString(L"\n");
 
 }
 
@@ -19,9 +22,7 @@ void GameState::draw()
 
 bool GameState::update(const GameTimer& gt)
 {  
-
-    // OutputDebugString(L"world update");
-    // OutputDebugString(L"\n");
+    
     // update world
     mWorld.update(gt);
 

@@ -1,6 +1,10 @@
 #include "Game.hpp"
 #include "GameState.h"
-// #include "State.h"
+#include "TitleState.h"
+
+
+
+
 
 const int gNumFrameResources = 3;
 
@@ -10,9 +14,6 @@ Game::Game(HINSTANCE hInstance)
 	, mStateStack(State::Context(mPlayer, *this))
 {
 
-	// statestack init
-	RegisterStates();
-	mStateStack.pushState(States::Game);
 
 }
 
@@ -49,8 +50,18 @@ bool Game::Initialize()
 	BuildShadersAndInputLayout();
 	BuildShapeGeometry();
 	BuildMaterials();
-	BuildRenderItems();
-	BuildFrameResources();
+
+
+
+	// statestack init
+	RegisterStates();
+	// push state
+	mStateStack.pushState(States::Title);
+
+
+
+	// BuildRenderItems();
+	// BuildFrameResources();
 	BuildPSOs();
 
 	// Execute the initialization commands.
@@ -90,7 +101,7 @@ void Game::processInput()
 
 void Game::RegisterStates()
 {
-	// mStateStack.registerState<TitleState>(States::Title);
+	mStateStack.registerState<TitleState>(States::Title);
 	// mStateStack.registerState<MenuState>(States::Menu);
 
 	mStateStack.registerState<GameState>(States::Game);
@@ -101,18 +112,21 @@ void Game::RegisterStates()
 
 void Game::Update(const GameTimer& gt)
 {
-	// OnKeyboardInput(gt);
 	// UpdateCamera(gt);
 	// mWorld.update(gt);
-	mStateStack.update(gt);
 	
 
-
+	// update state stack
+	mStateStack.update(gt);
+	
+	OnKeyboardInput(gt);
 	// processInput();
+
+
 
 	mCamera.UpdateViewMatrix();
 	// Cycle through the circular frame resource array.
-	mCurrFrameResourceIndex = (mCurrFrameResourceIndex + 1) % gNumFrameResources;
+	mCurrFrameResourceIndex = (mCurrFrameResourceIndex + 1) % mFrameResources.size();
 	mCurrFrameResource = mFrameResources[mCurrFrameResourceIndex].get();
 
 	// Has the GPU finished processing the commands of the current frame resource?
@@ -126,7 +140,11 @@ void Game::Update(const GameTimer& gt)
 	}
 
 	AnimateMaterials(gt);
-	UpdateObjectCBs(gt);
+	
+	// pass state all render item to here
+	mStateStack.UpdateStateObjectCB();
+
+	// UpdateObjectCBs(gt);
 	UpdateMaterialCBs(gt);
 	UpdateMainPassCB(gt);
 }
@@ -170,7 +188,7 @@ void Game::Draw(const GameTimer& gt)
 	// mWorld.draw();
 
 	// draw statestack
-	mStateStack.draw();
+	// mStateStack.draw();
 
 
 
@@ -280,7 +298,6 @@ void Game::OnKeyboardInput(const GameTimer& gt)
 	// 	}
 	// }
 
-
 }
 
 void Game::UpdateCamera(const GameTimer& gt)
@@ -306,10 +323,10 @@ void Game::AnimateMaterials(const GameTimer& gt)
 
 }
 
-void Game::UpdateObjectCBs(const GameTimer& gt)
+void Game::UpdateObjectCBs(vector<unique_ptr<RenderItem>>& allrenderitems)
 {
 	auto currObjectCB = mCurrFrameResource->ObjectCB.get();
-	for (auto& e : mAllRitems)
+	for (auto& e : allrenderitems)
 	{
 		// Only update the cbuffer data if the constants have changed.  
 		// This needs to be tracked per frame resource.
@@ -414,14 +431,25 @@ void Game::LoadTextures()
 	mTextures[RaptorTex->Name] = std::move(RaptorTex);
 
 	//Desert
-	auto DesertTex = std::make_unique<Texture>();
-	DesertTex->Name = "DesertTex";
-	DesertTex->Filename = L"../../Textures/grass.dds";
+	auto GrassTex = std::make_unique<Texture>();
+	GrassTex->Name = "GrassTex";
+	GrassTex->Filename = L"../../Textures/grass.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
-		mCommandList.Get(), DesertTex->Filename.c_str(),
-		DesertTex->Resource, DesertTex->UploadHeap));
+		mCommandList.Get(), GrassTex->Filename.c_str(),
+		GrassTex->Resource, GrassTex->UploadHeap));
 
-	mTextures[DesertTex->Name] = std::move(DesertTex);
+	mTextures[GrassTex->Name] = std::move(GrassTex);
+
+	//Desert
+	auto TitleTex = std::make_unique<Texture>();
+	TitleTex->Name = "TitleTex";
+	TitleTex->Filename = L"../../Textures/rogers.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), TitleTex->Filename.c_str(),
+		TitleTex->Resource, TitleTex->UploadHeap));
+
+	mTextures[TitleTex->Name] = std::move(TitleTex);
+
 }
 
 void Game::BuildRootSignature()
@@ -437,6 +465,7 @@ void Game::BuildRootSignature()
 	slotRootParameter[1].InitAsConstantBufferView(0);
 	slotRootParameter[2].InitAsConstantBufferView(1);
 	slotRootParameter[3].InitAsConstantBufferView(2);
+	
 
 	auto staticSamplers = GetStaticSamplers();
 
@@ -474,7 +503,7 @@ void Game::BuildDescriptorHeaps()
 	// Create the SRV heap.
 	//
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	srvHeapDesc.NumDescriptors = 3;
+	srvHeapDesc.NumDescriptors = 4;
 	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	ThrowIfFailed(md3dDevice->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&mSrvDescriptorHeap)));
@@ -486,7 +515,9 @@ void Game::BuildDescriptorHeaps()
 
 	auto EagleTex = mTextures["EagleTex"]->Resource;
 	auto RaptorTex = mTextures["RaptorTex"]->Resource;
-	auto DesertTex = mTextures["DesertTex"]->Resource;
+	auto GrassTex = mTextures["GrassTex"]->Resource;
+	auto TitleTex = mTextures["TitleTex"]->Resource;
+
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 
@@ -519,8 +550,13 @@ void Game::BuildDescriptorHeaps()
 
 	//Desert Descriptor
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
-	srvDesc.Format = DesertTex->GetDesc().Format;
-	md3dDevice->CreateShaderResourceView(DesertTex.Get(), &srvDesc, hDescriptor);
+	srvDesc.Format = GrassTex->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(GrassTex.Get(), &srvDesc, hDescriptor);
+
+	// title Descriptor
+	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
+	srvDesc.Format = TitleTex->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(TitleTex.Get(), &srvDesc, hDescriptor);
 
 }
 
@@ -621,12 +657,16 @@ void Game::BuildPSOs()
 	ThrowIfFailed(md3dDevice->CreateGraphicsPipelineState(&opaquePsoDesc, IID_PPV_ARGS(&mOpaquePSO)));
 }
 
-void Game::BuildFrameResources()
+void Game::BuildFrameResources(int size)
 {
-	for (int i = 0; i < gNumFrameResources; ++i)
+	for (int i = 0; i < size; ++i)
 	{
-		mFrameResources.push_back(std::make_unique<FrameResource>(md3dDevice.Get(),
-			1, (UINT)mAllRitems.size(), (UINT)mMaterials.size()));
+		mFrameResources.push_back(std::make_unique<FrameResource>(
+			md3dDevice.Get(),
+			1, 
+			(UINT)size, 
+			(UINT)mMaterials.size()
+		));
 	}
 }
 //step13
@@ -653,30 +693,40 @@ void Game::BuildMaterials()
 	mMaterials["Raptor"] = std::move(Raptor);
 
 	auto Desert = std::make_unique<Material>();
-	Desert->Name = "Desert";
+	Desert->Name = "Grass";
 	Desert->MatCBIndex = 2;
 	Desert->DiffuseSrvHeapIndex = 2;
 	Desert->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	Desert->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
 	Desert->Roughness = 0.2f;
 
-	mMaterials["Desert"] = std::move(Desert);
+	mMaterials["Grass"] = std::move(Desert);
+
+	auto Title = std::make_unique<Material>();
+	Title->Name = "Title";
+	Title->MatCBIndex = 3;
+	Title->DiffuseSrvHeapIndex = 3;
+	Title->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	Title->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
+	Title->Roughness = 0.2f;
+
+	mMaterials["Title"] = std::move(Title);
 
 }
 
-void Game::BuildRenderItems()
+void Game::BuildRenderItems(vector<unique_ptr<RenderItem>>& allrenderitems)
 {
 	// build world
 	// mWorld.buildScene();
 	
 
 
-	mStateStack.BuildStateWorld();
+	// mStateStack.BuildStateWorld();
 
 
 
 	// All the render items are opaque.
-	for (auto& e : mAllRitems)
+	for (auto& e : allrenderitems)
 	{
 		mOpaqueRitems.push_back(e.get());
 	}

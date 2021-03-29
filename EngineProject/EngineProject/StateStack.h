@@ -26,13 +26,16 @@ public:
     {
         mFactories[stateID] = [this]()
         {
-            return State::Ptr(new T(*this, mContext));
+            return State::Ptr(new T(this, &mContext));
         };
     }
 
     void update(const GameTimer& gt);
     void draw();
     // void handleEvent(const )
+
+    void UpdateStateObjectCB();
+
 
 
     // state manipulation

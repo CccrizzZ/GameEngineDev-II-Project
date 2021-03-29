@@ -1,12 +1,23 @@
 #include "SceneNode.hpp"
 #include "Game.hpp"
 #include "CommandQueue.h"
+#include "State.h"
 
 
-SceneNode::SceneNode(Game* game)
+// SceneNode::SceneNode(Game* game)
+// 	: mChildren()
+// 	, mParent(nullptr)
+// 	, game(game)
+// {
+// 	mWorldPosition = XMFLOAT3(0, 0, 0);
+// 	mWorldScaling = XMFLOAT3(1, 1, 1);
+// 	mWorldRotation = XMFLOAT3(0, 0, 0);
+// }
+
+SceneNode::SceneNode(State* state)
 	: mChildren()
 	, mParent(nullptr)
-	, game(game)
+	, mState(state)
 {
 	mWorldPosition = XMFLOAT3(0, 0, 0);
 	mWorldScaling = XMFLOAT3(1, 1, 1);

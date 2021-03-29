@@ -12,7 +12,9 @@ public:
 		Raptor,
 	};
 
-	Enemy(Type type, Game* game);
+	// Enemy(Type type, Game* game);
+	Enemy(Type type, State* state);
+
 
 
 private:

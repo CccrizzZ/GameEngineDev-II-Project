@@ -1,12 +1,14 @@
 #pragma once
 #include "State.h"
-
+#include "Player.h"
+#include "World.hpp"
+using namespace std;
 
 
 class TitleState : public State
 {
 public:
-    TitleState(StateStack& stack, Context context);
+    TitleState(StateStack* stack, Context* context);
 
 
     virtual void draw();
@@ -16,6 +18,8 @@ public:
 private:
 
 
+    // entities
+    SpriteNode*	bg;
 
 };
 

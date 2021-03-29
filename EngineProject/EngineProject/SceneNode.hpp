@@ -49,8 +49,7 @@ struct RenderItem
 
 class Game;
 struct Command;
-
-
+class State;
 
 namespace Category
 {
@@ -76,7 +75,10 @@ public:
 
 
 public:
-	SceneNode(Game* game);
+	// SceneNode(Game* game);
+
+	SceneNode(State* state);
+
 
 	void attachChild(Ptr child);
 	Ptr	detachChild(const SceneNode& node);
@@ -110,6 +112,9 @@ public:
 
 	virtual unsigned int getCategory() const;
 	void setCategory(int c);
+	State* mState;
+	Game* game;
+	RenderItem* renderer;
 
 private:
 	virtual void updateCurrent(const GameTimer& gt);
@@ -121,8 +126,8 @@ private:
 	void buildChildren();
 
 protected:
-	Game* game;
-	RenderItem* renderer;
+	
+
 private:
 	XMFLOAT3 mWorldPosition;
 	XMFLOAT3 mWorldRotation;

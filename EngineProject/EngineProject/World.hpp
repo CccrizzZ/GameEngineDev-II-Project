@@ -3,7 +3,7 @@
 #include "Aircraft.hpp"
 #include "SpriteNode.h"
 #include "CommandQueue.h"
-
+#include "TitleSprite.h"
 
 class World 
 {
@@ -32,8 +32,6 @@ private:
 	SceneNode* mSceneGraph;
 	std::array<SceneNode*, LayerCount> mSceneLayers;
 
-	XMFLOAT4 mWorldBounds;
-	XMFLOAT2 mSpawnPosition;
 
 	// entities
 	Aircraft* mPlayerAircraft;
@@ -41,7 +39,6 @@ private:
 	Aircraft* mEnemy;
 	
 	
-	float mScrollSpeed;
 	XMFLOAT3 aircraftSize;
 	XMFLOAT3 enemySize;
 

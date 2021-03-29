@@ -1,6 +1,8 @@
 #pragma once
 #include "Entity.hpp"
 #include "CommandQueue.h"
+#include "State.h"
+using namespace std;
 
 class SpriteNode : public Entity
 {
@@ -17,11 +19,20 @@ public:
         }
     };
 
-	SpriteNode(Game* game);
+	// SpriteNode(Game* game);
+	SpriteNode(State* state);
+
 	void Update(const GameTimer gt);
 	void UpdateWithCmd(CommandQueue& commands);
+    void SetGeoDrawName(string material, string geometry, string shape);
+   
+
+
 
 	float backgroundSpeed;
+
+    unique_ptr<RenderItem> SpriteRenderer;
+
 
 private:
 	virtual void drawCurrent() const;

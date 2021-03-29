@@ -7,22 +7,32 @@
 
 State::Context::Context(Player& player, Game& game) : player(&player), game(&game)
 {
-	world = new World(&game);
+	// world = new World(&game);
 }
 
 void State::Context::BuildWorld()
 {
-	world->buildScene();
+	// world->buildScene();
 }
 
-State::State(StateStack& stack, Context context)
-	: mStack(&stack)
+State::State(StateStack* stack, Context* context)
+	: mStack(stack)
 	, mContext(context)
+	, mSceneGraph(make_unique<SceneNode>(this))
 {
 }
 
 State::~State()
 {
+}
+
+
+
+bool State::UpdateObjectCB()
+{
+	mContext->game->UpdateObjectCBs(mAllRitems);
+
+	return true;
 }
 
 
@@ -42,7 +52,7 @@ void State::requestStateClear()
 	mStack->clearStates();
 }
 
-State::Context State::getContext() const
+State::Context* State::getContext() const
 {
 	return mContext;
 }

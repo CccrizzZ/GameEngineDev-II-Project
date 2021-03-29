@@ -32,35 +32,53 @@ public:
     // context for each state object
     struct Context
     {
-        // Context() = default;
-
         Context(Player& player, Game& game);
 
         void BuildWorld();
         
+        // World* world;
         Game* game;
-        World* world;
         Player* player;
     };
 
-    State(StateStack& stack, Context context);
+    State(StateStack* stack, Context* context);
+
     virtual ~State();
     virtual void draw() = 0 ;
     virtual bool update(const GameTimer& gt) = 0;
     // virtual bool handleEvent()
+    bool UpdateObjectCB();
+
+
+
+    // get render item list
+    std::vector<std::unique_ptr<RenderItem>>& getRenderItems() { return mAllRitems; }
     
+    // scene graph
+    unique_ptr<SceneNode> mSceneGraph;
+
+    // return state context
+    Context* getContext() const;
+
 protected:
     // manipulation method
     void requestStackPush(States::ID stateID);
     void requestStackPop();
     void requestStateClear();
 
-    // return state context
-    Context getContext() const;
+
+    Context* mContext;
+
+
+
+	// List of all the render items.
+	vector<unique_ptr<RenderItem>> mAllRitems;
+
 
 private:
     StateStack* mStack;
-    Context mContext;
 
+
+    // scene graph
 };
 

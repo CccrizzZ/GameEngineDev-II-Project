@@ -14,6 +14,16 @@ public:
 	~Game();
 
 	virtual bool Initialize()override;
+
+	// upgraded
+	void UpdateObjectCBs(vector<unique_ptr<RenderItem>>& allrenderitems);
+
+	// upgraded
+	void BuildFrameResources(int size);
+
+	// upgraded
+	void BuildRenderItems(vector<unique_ptr<RenderItem>>& allrenderitems);
+	
 private:
 	virtual void OnResize()override;
 	virtual void Update(const GameTimer& gt)override;
@@ -26,7 +36,10 @@ private:
 	void OnKeyboardInput(const GameTimer& gt);
 	void UpdateCamera(const GameTimer& gt);
 	void AnimateMaterials(const GameTimer& gt);
-	void UpdateObjectCBs(const GameTimer& gt);
+	
+	
+
+
 	void UpdateMaterialCBs(const GameTimer& gt);
 	void UpdateMainPassCB(const GameTimer& gt);
 
@@ -47,9 +60,11 @@ private:
 	void BuildShadersAndInputLayout();
 	void BuildShapeGeometry();
 	void BuildPSOs();
-	void BuildFrameResources();
+
+	
+	
 	void BuildMaterials();
-	void BuildRenderItems();
+	
 	void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<RenderItem*>& ritems);
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
@@ -79,8 +94,8 @@ private:
 
 	ComPtr<ID3D12PipelineState> mOpaquePSO = nullptr;
 
-	// List of all the render items.
-	std::vector<std::unique_ptr<RenderItem>> mAllRitems;
+	// // List of all the render items.
+	// std::vector<std::unique_ptr<RenderItem>> mAllRitems;
 
 	// Render items divided by PSO.
 	std::vector<RenderItem*> mOpaqueRitems;
@@ -106,7 +121,9 @@ private:
 
 
 public:
-	std::vector<std::unique_ptr<RenderItem>>& getRenderItems() { return mAllRitems; }
+
+
+	// std::vector<std::unique_ptr<RenderItem>>& getRenderItems() { return mStateStack; }
 	std::unordered_map<std::string, std::unique_ptr<Material>>& getMaterials() { return mMaterials; }
 	std::unordered_map<std::string, std::unique_ptr<MeshGeometry>>& getGeometries() { return mGeometries; }
 };

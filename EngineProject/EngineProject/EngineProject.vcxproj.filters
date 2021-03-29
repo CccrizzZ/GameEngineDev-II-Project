@@ -45,9 +45,6 @@
     <ClCompile Include="SpriteNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Common\Camera.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -75,10 +72,16 @@
     <ClCompile Include="StateStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameState.cpp">
+    <ClCompile Include="TitleState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TitleState.cpp">
+    <ClCompile Include="TitleSprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -108,9 +111,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="SpriteNode.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="World.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Common\Camera.h">
@@ -146,10 +146,16 @@
     <ClInclude Include="StateStack.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameState.h">
+    <ClInclude Include="TitleState.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="TitleState.h">
+    <ClInclude Include="TitleSprite.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="World.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

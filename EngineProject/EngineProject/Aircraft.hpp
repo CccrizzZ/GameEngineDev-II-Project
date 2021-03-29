@@ -16,7 +16,10 @@ public:
 	};
 	
 
-	Aircraft(Type type, Game* game);
+	//Aircraft(Type type, Game* game);
+	
+	Aircraft(Type type, State* state);
+
 	void Update(const GameTimer& gt);
 	unsigned int getCategory() const;
 
