@@ -1,7 +1,8 @@
-#include "TitleState.h"
+#include "MenuState.h"
 #include "Game.hpp"
 
-TitleState::TitleState(StateStack* stack, Context* context)
+
+MenuState::MenuState(StateStack* stack, Context* context)
     : State(stack, context)
 {
     OutputDebugString(L"title init");
@@ -9,27 +10,26 @@ TitleState::TitleState(StateStack* stack, Context* context)
     
     mAllRitems.clear();
 
-
 	// Background
 	std::unique_ptr<TitleSprite> backgroundSprite(new TitleSprite(this));
 	bg = backgroundSprite.get();
 	bg->setPosition(0.0f, 1.0f, 0.0f);
 	bg->setScale(2.5f, 1.0f, 1.5f);
-    bg->TextureName = TitleTextureName;
+    bg->TextureName = MenuTextureName;
 	mSceneGraph->attachChild(std::move(backgroundSprite));
 
 	std::unique_ptr<TitleSprite> backgroundSprite2(new TitleSprite(this));
 	bg2 = backgroundSprite2.get();
 	bg2->setPosition(0.0f, 1.0f, 0.0f);
 	bg2->setScale(2.5f, 1.0f, 1.5f);
-    bg2->TextureName = TitleTextureName;
+    bg2->TextureName = MenuTextureName;
 	mSceneGraph->attachChild(std::move(backgroundSprite2));
 
 	std::unique_ptr<TitleSprite> backgroundSprite3(new TitleSprite(this));
 	bg3 = backgroundSprite3.get();
 	bg3->setPosition(0.0f, 1.0f, 0.0f);
 	bg3->setScale(2.5f, 1.0f, 1.5f);
-    bg3->TextureName = TitleTextureName;
+    bg3->TextureName = MenuTextureName;
 	mSceneGraph->attachChild(std::move(backgroundSprite3));
 
 
@@ -51,32 +51,36 @@ TitleState::TitleState(StateStack* stack, Context* context)
     
 }
 
-void TitleState::draw()
+void MenuState::draw()
 {
     mSceneGraph->draw();
 }
 
-bool TitleState::handleEvent(WPARAM btnState)
+bool MenuState::handleEvent(WPARAM btnState)
 {
-    requestStackPop();
-    requestStackPush(States::Menu);
-    return false;
+    return true;
 }
 
-
-bool TitleState::update(const GameTimer& gt)
+bool MenuState::update(const GameTimer& gt)
 {
 
 
     mSceneGraph->update(gt);
 
-    // press g to goto game state
-    // if (GetAsyncKeyState('M') & 0x8000)
-    // {
-    //     requestStackPop();
-    //     requestStackPush(States::Menu);
-    //     return false;
-    // }
+    if (GetAsyncKeyState('G') & 0x8000)
+    {
+        requestStackPop();
+        requestStackPush(States::Game);
+        return false;
+    }
+
+    if (GetAsyncKeyState('T') & 0x8000)
+    {
+        requestStackPop();
+        requestStackPush(States::Title);
+        return false;
+    }
+
 
 	bg->Update(gt);
 

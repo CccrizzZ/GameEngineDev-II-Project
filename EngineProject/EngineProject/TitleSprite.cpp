@@ -37,7 +37,7 @@ void TitleSprite::buildCurrent()
 	renderer->World = getTransform();
 	XMStoreFloat4x4(&renderer->TexTransform, XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	renderer->ObjCBIndex = mState->getRenderItems().size();
-	renderer->Mat = mState->getContext()->game->getMaterials()["Title"].get();
+	renderer->Mat = mState->getContext()->game->getMaterials()[TextureName].get();
 	renderer->Geo = mState->getContext()->game->getGeometries()["boxGeo"].get();
 	renderer->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	renderer->IndexCount = renderer->Geo->DrawArgs["box"].IndexCount;
@@ -46,3 +46,4 @@ void TitleSprite::buildCurrent()
 	
 	mState->getRenderItems().push_back(std::move(SpriteRenderer));
 }
+

@@ -43,7 +43,7 @@ public:
     void popState();
     void clearStates();
 
-
+    void handleEvent(WPARAM btnState);
     // determine if stack empty
     bool isEmpty() const;
 

@@ -5,19 +5,18 @@
 using namespace std;
 
 
-class TitleState : public State
+class MenuState : public State
 {
 public:
-    TitleState(StateStack* stack, Context* context);
+    MenuState(StateStack* stack, Context* context);
 
 
     virtual void draw();
     virtual bool update(const GameTimer& gt);
     virtual bool handleEvent(WPARAM btnState);
-
 private:
 
-    string TitleTextureName = "Title";
+    string MenuTextureName = "Menu";
 
     // entities
     TitleSprite* bg;
@@ -26,4 +25,3 @@ private:
 
 
 };
-

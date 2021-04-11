@@ -12,6 +12,7 @@ public:
 	void Update(const GameTimer gt);
 	void UpdateWithCmd(CommandQueue& commands);
 
+	string TextureName;
 
 private:
 	virtual void drawCurrent() const;
@@ -19,5 +20,7 @@ private:
 
 	
     unique_ptr<RenderItem> SpriteRenderer;
+
+	
 };
 

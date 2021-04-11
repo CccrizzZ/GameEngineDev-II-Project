@@ -8,6 +8,15 @@ StateStack::StateStack(State::Context context)
 {
 }
 
+void StateStack::handleEvent(WPARAM btnState)
+{
+	// Iterate from top to bottom, stop as soon as handleEvent() returns false
+	for (auto itr = mStack.rbegin(); itr != mStack.rend(); ++itr)
+	{
+		if (!(*itr)->handleEvent(btnState))
+			break;
+	}
+}
 
 void StateStack::update(const GameTimer& gt)
 {

@@ -366,7 +366,13 @@ LRESULT D3DApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             Set4xMsaaState(!m4xMsaaState);
 
         return 0;
+		
+	case WM_KEYDOWN:
+		OnKeyDown(wParam);
+		return 0;
+	
 	}
+	
 
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }

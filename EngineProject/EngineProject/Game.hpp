@@ -23,7 +23,7 @@ public:
 
 	// upgraded
 	void BuildRenderItems(vector<unique_ptr<RenderItem>>& allrenderitems);
-	
+	void ClearFrameResources();
 private:
 	virtual void OnResize()override;
 	virtual void Update(const GameTimer& gt)override;
@@ -32,7 +32,8 @@ private:
 	virtual void OnMouseDown(WPARAM btnState, int x, int y)override;
 	virtual void OnMouseUp(WPARAM btnState, int x, int y)override;
 	virtual void OnMouseMove(WPARAM btnState, int x, int y)override;
-
+	virtual void OnKeyDown(WPARAM btnState)override;
+	
 	void OnKeyboardInput(const GameTimer& gt);
 	void UpdateCamera(const GameTimer& gt);
 	void AnimateMaterials(const GameTimer& gt);
@@ -61,7 +62,7 @@ private:
 	void BuildShapeGeometry();
 	void BuildPSOs();
 
-	
+
 	
 	void BuildMaterials();
 	

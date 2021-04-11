@@ -46,7 +46,7 @@ public:
     virtual ~State();
     virtual void draw() = 0 ;
     virtual bool update(const GameTimer& gt) = 0;
-    // virtual bool handleEvent()
+    virtual bool handleEvent(WPARAM btnState) = 0;
     bool UpdateObjectCB();
 
 

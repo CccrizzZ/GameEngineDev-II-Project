@@ -1,6 +1,8 @@
 #include "Game.hpp"
 #include "GameState.h"
 #include "TitleState.h"
+#include "MenuState.h"
+
 
 
 
@@ -103,8 +105,7 @@ void Game::processInput()
 void Game::RegisterStates()
 {
 	mStateStack.registerState<TitleState>(States::Title);
-	// mStateStack.registerState<MenuState>(States::Menu);
-
+	mStateStack.registerState<MenuState>(States::Menu);
 	mStateStack.registerState<GameState>(States::Game);
 
 
@@ -305,6 +306,14 @@ void Game::OnKeyboardInput(const GameTimer& gt)
 
 }
 
+void Game::OnKeyDown(WPARAM btnState)
+{
+	// Propagate the wParam (the key code) of the keypress event to the state stack
+	mStateStack.handleEvent(btnState);
+}
+
+
+
 void Game::UpdateCamera(const GameTimer& gt)
 {
 	// Convert Spherical to Cartesian coordinates.
@@ -445,7 +454,7 @@ void Game::LoadTextures()
 
 	mTextures[GrassTex->Name] = std::move(GrassTex);
 
-	//Desert
+	// Title
 	auto TitleTex = std::make_unique<Texture>();
 	TitleTex->Name = "TitleTex";
 	TitleTex->Filename = L"../../Textures/gbc1.dds";
@@ -454,6 +463,16 @@ void Game::LoadTextures()
 		TitleTex->Resource, TitleTex->UploadHeap));
 
 	mTextures[TitleTex->Name] = std::move(TitleTex);
+
+	// Menu
+	auto MenuTex = std::make_unique<Texture>();
+	MenuTex->Name = "MenuTex";
+	MenuTex->Filename = L"../../Textures/tile.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), MenuTex->Filename.c_str(),
+		MenuTex->Resource, MenuTex->UploadHeap));
+
+	mTextures[MenuTex->Name] = std::move(MenuTex);
 
 }
 
@@ -508,7 +527,7 @@ void Game::BuildDescriptorHeaps()
 	// Create the SRV heap.
 	//
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	srvHeapDesc.NumDescriptors = 4;
+	srvHeapDesc.NumDescriptors = mTextures.size();
 	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	ThrowIfFailed(md3dDevice->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&mSrvDescriptorHeap)));
@@ -522,6 +541,7 @@ void Game::BuildDescriptorHeaps()
 	auto RaptorTex = mTextures["RaptorTex"]->Resource;
 	auto GrassTex = mTextures["GrassTex"]->Resource;
 	auto TitleTex = mTextures["TitleTex"]->Resource;
+	auto MenuTex = mTextures["MenuTex"]->Resource;
 
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -562,6 +582,11 @@ void Game::BuildDescriptorHeaps()
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
 	srvDesc.Format = TitleTex->GetDesc().Format;
 	md3dDevice->CreateShaderResourceView(TitleTex.Get(), &srvDesc, hDescriptor);
+
+	// menu Descriptor
+	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
+	srvDesc.Format = MenuTex->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(MenuTex.Get(), &srvDesc, hDescriptor);
 
 }
 
@@ -662,17 +687,21 @@ void Game::BuildPSOs()
 	ThrowIfFailed(md3dDevice->CreateGraphicsPipelineState(&opaquePsoDesc, IID_PPV_ARGS(&mOpaquePSO)));
 }
 
+
+// clear all frame resoureces (not working, wipes out everything when changing state)
+void Game::ClearFrameResources()
+{
+	mFrameResources.clear();
+}
+
 void Game::BuildFrameResources(int buildsize)
 {
-
-	// mFrameResources.clear();
-
-	// int temp = mFrameResources.size() - buildsize;
 
 	
 	if (mFrameResources.size() != buildsize)
 	{
-		for (int i = 0; i < buildsize; ++i)
+	
+		for (int i = 0; i < gNumFrameResources; ++i)
 		{
 			mFrameResources.push_back(
 				std::make_unique<FrameResource>(
@@ -732,6 +761,16 @@ void Game::BuildMaterials()
 	Title->Roughness = 0.2f;
 
 	mMaterials["Title"] = std::move(Title);
+
+	auto Menu = std::make_unique<Material>();
+	Menu->Name = "Menu";
+	Menu->MatCBIndex = 4;
+	Menu->DiffuseSrvHeapIndex = 4;
+	Menu->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	Menu->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
+	Menu->Roughness = 0.2f;
+
+	mMaterials["Menu"] = std::move(Menu);
 
 }
 

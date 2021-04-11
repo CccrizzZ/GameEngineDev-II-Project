@@ -11,8 +11,8 @@ public:
 
     void draw();
     bool update(const GameTimer& gt);
-    virtual bool handleEvent();
-
+    virtual bool handleEvent(WPARAM btnState);
+    
 private:
     Game* mGame;
     Aircraft* mPlayerAircraft;

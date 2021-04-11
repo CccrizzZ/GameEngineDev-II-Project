@@ -50,6 +50,9 @@ GameState::GameState(StateStack* stack, Context* context):
     // build scenegraph
     mSceneGraph->build();
 
+    // clear frame resources
+    // getContext()->game->ClearFrameResources();
+
     // build render items
     getContext()->game->BuildRenderItems(mAllRitems);
 
@@ -91,10 +94,10 @@ bool GameState::update(const GameTimer& gt)
 
 
     // press t to goto title state
-    if (GetAsyncKeyState('T') & 0x8000)
+    if (GetAsyncKeyState('M') & 0x8000)
     {
         requestStackPop();
-        requestStackPush(States::Title);
+        requestStackPush(States::Menu);
         
         return false;
     }
@@ -103,8 +106,8 @@ bool GameState::update(const GameTimer& gt)
 
 }
 
-bool GameState::handleEvent()
+bool GameState::handleEvent(WPARAM btnState)
 {
 
-	return false;
+	return true;
 }
