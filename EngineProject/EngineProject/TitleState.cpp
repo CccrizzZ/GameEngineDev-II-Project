@@ -14,21 +14,21 @@ TitleState::TitleState(StateStack* stack, Context* context)
 	std::unique_ptr<TitleSprite> backgroundSprite(new TitleSprite(this));
 	bg = backgroundSprite.get();
 	bg->setPosition(0.0f, 1.0f, 0.0f);
-	bg->setScale(2.5f, 1.0f, 1.5f);
+	bg->setScale(4.0f, 1.0f, 1.0f);
     bg->TextureName = TitleTextureName;
 	mSceneGraph->attachChild(std::move(backgroundSprite));
 
 	std::unique_ptr<TitleSprite> backgroundSprite2(new TitleSprite(this));
 	bg2 = backgroundSprite2.get();
 	bg2->setPosition(0.0f, 1.0f, 0.0f);
-	bg2->setScale(2.5f, 1.0f, 1.5f);
+	bg2->setScale(4.0f, 1.0f, 1.0f);
     bg2->TextureName = TitleTextureName;
 	mSceneGraph->attachChild(std::move(backgroundSprite2));
 
 	std::unique_ptr<TitleSprite> backgroundSprite3(new TitleSprite(this));
 	bg3 = backgroundSprite3.get();
 	bg3->setPosition(0.0f, 1.0f, 0.0f);
-	bg3->setScale(2.5f, 1.0f, 1.5f);
+	bg3->setScale(4.0f, 1.0f, 1.0f);
     bg3->TextureName = TitleTextureName;
 	mSceneGraph->attachChild(std::move(backgroundSprite3));
 

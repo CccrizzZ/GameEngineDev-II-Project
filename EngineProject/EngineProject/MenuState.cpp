@@ -13,22 +13,22 @@ MenuState::MenuState(StateStack* stack, Context* context)
 	// Background
 	std::unique_ptr<TitleSprite> backgroundSprite(new TitleSprite(this));
 	bg = backgroundSprite.get();
-	bg->setPosition(0.0f, -1.0f, 0.0f);
-	bg->setScale(8.0f, 1.0f, 4.5f);
+	bg->setPosition(0.0f, 0.0f, -5.0f);
+	bg->setScale(4.0f, 1.0f, 1.0f);
     bg->TextureName = MenuTextureName;
 	mSceneGraph->attachChild(std::move(backgroundSprite));
 
 	std::unique_ptr<TitleSprite> backgroundSprite2(new TitleSprite(this));
 	bg2 = backgroundSprite2.get();
 	bg2->setPosition(0.0f, 0.0f, 0.0f);
-	bg2->setScale(8.0f, 1.0f, 4.5f);
+	bg2->setScale(4.0f, 1.0f, 1.0f);
     bg2->TextureName = MenuTextureName;
 	mSceneGraph->attachChild(std::move(backgroundSprite2));
 
 	std::unique_ptr<TitleSprite> backgroundSprite3(new TitleSprite(this));
 	bg3 = backgroundSprite3.get();
-	bg3->setPosition(0.0f, -2.0f, 0.0f);
-	bg3->setScale(8.0f, 1.0f, 4.5f);
+	bg3->setPosition(0.0f, 0.0f, 5.0f);
+	bg3->setScale(4.0f, 1.0f, 1.0f);
     bg3->TextureName = MenuTextureName;
 	mSceneGraph->attachChild(std::move(backgroundSprite3));
 

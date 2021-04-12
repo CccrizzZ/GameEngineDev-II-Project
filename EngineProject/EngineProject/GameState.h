@@ -16,7 +16,7 @@ public:
 private:
     Game* mGame;
     Aircraft* mPlayerAircraft;
-	SpriteNode*	mBackground;
+	SpriteNode*	mBackground; 
 	Aircraft* mEnemy;
 	
     World mWorld;

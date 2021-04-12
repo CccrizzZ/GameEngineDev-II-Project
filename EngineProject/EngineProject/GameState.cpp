@@ -47,6 +47,8 @@ GameState::GameState(StateStack* stack, Context* context):
 
 
 
+
+
     // build scenegraph
     mSceneGraph->build();
 

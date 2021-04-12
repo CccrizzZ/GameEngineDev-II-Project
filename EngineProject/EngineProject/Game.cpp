@@ -457,7 +457,7 @@ void Game::LoadTextures()
 	// Title
 	auto TitleTex = std::make_unique<Texture>();
 	TitleTex->Name = "TitleTex";
-	TitleTex->Filename = L"../../Textures/gbc1.dds";
+	TitleTex->Filename = L"../../Textures/TITLESTATE.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
 		mCommandList.Get(), TitleTex->Filename.c_str(),
 		TitleTex->Resource, TitleTex->UploadHeap));
@@ -467,12 +467,23 @@ void Game::LoadTextures()
 	// Menu
 	auto MenuTex = std::make_unique<Texture>();
 	MenuTex->Name = "MenuTex";
-	MenuTex->Filename = L"../../Textures/cute_image.dds";
+	MenuTex->Filename = L"../../Textures/MENUSTATE.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
 		mCommandList.Get(), MenuTex->Filename.c_str(),
 		MenuTex->Resource, MenuTex->UploadHeap));
 
 	mTextures[MenuTex->Name] = std::move(MenuTex);
+
+
+	// INGAME UI
+	auto GameUITex = std::make_unique<Texture>();
+	GameUITex->Name = "GameUITex";
+	GameUITex->Filename = L"../../Textures/MENUSTATE.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), GameUITex->Filename.c_str(),
+		GameUITex->Resource, GameUITex->UploadHeap));
+
+	mTextures[GameUITex->Name] = std::move(GameUITex);
 
 
 
@@ -545,6 +556,7 @@ void Game::BuildDescriptorHeaps()
 	auto GrassTex = mTextures["GrassTex"]->Resource;
 	auto TitleTex = mTextures["TitleTex"]->Resource;
 	auto MenuTex = mTextures["MenuTex"]->Resource;
+	auto GameUITex = mTextures["GameUITex"]->Resource;
 
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -590,6 +602,12 @@ void Game::BuildDescriptorHeaps()
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
 	srvDesc.Format = MenuTex->GetDesc().Format;
 	md3dDevice->CreateShaderResourceView(MenuTex.Get(), &srvDesc, hDescriptor);
+
+	// game UI Descriptor
+	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
+	srvDesc.Format = GameUITex->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(GameUITex.Get(), &srvDesc, hDescriptor);
+
 
 }
 
@@ -774,6 +792,18 @@ void Game::BuildMaterials()
 	Menu->Roughness = 0.2f;
 
 	mMaterials["Menu"] = std::move(Menu);
+
+
+
+	auto GameUI = std::make_unique<Material>();
+	GameUI->Name = "GameUI";
+	GameUI->MatCBIndex = 4;
+	GameUI->DiffuseSrvHeapIndex = 4;
+	GameUI->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	GameUI->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
+	GameUI->Roughness = 0.2f;
+
+	mMaterials["GameUI"] = std::move(GameUI);
 
 }
 
