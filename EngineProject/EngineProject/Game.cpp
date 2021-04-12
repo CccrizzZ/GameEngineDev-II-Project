@@ -467,12 +467,15 @@ void Game::LoadTextures()
 	// Menu
 	auto MenuTex = std::make_unique<Texture>();
 	MenuTex->Name = "MenuTex";
-	MenuTex->Filename = L"../../Textures/tile.dds";
+	MenuTex->Filename = L"../../Textures/cute_image.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
 		mCommandList.Get(), MenuTex->Filename.c_str(),
 		MenuTex->Resource, MenuTex->UploadHeap));
 
 	mTextures[MenuTex->Name] = std::move(MenuTex);
+
+
+
 
 }
 
